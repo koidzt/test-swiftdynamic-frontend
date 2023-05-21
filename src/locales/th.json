@@ -1,0 +1,56 @@
+{
+  "language": { "en": "อังกฤษ", "th": "ไทย" },
+  "homepage": "หน้าหลัก",
+  "home": {
+    "menu1": {
+      "title": "แบบทดสอบที่ 1",
+      "description": "การจัดการหน้าเว็บ"
+    },
+    "menu2": {
+      "title": "แบบทดสอบที่ 2",
+      "description": "การเชื่อมต่อ API"
+    },
+    "menu3": {
+      "title": "แบบทดสอบที่ 3",
+      "description": "การจัดการหน้าฟอร์ม"
+    }
+  },
+  "test1": {
+    "title": "การจัดการหน้าเว็บ",
+    "moveShape": "เลื่อนรูปแบบ",
+    "movePosition": "เปลี่ยนตำแหน่ง"
+  },
+  "test3": {
+    "title": "การจัดการหน้าฟอร์ม",
+    "language": [{ "en": "อังกฤษ" }, { "th": "ไทย" }],
+    "home": "หน้าหลัก",
+    "form": {
+      "title": "คำนำหน้า",
+      "name": "ชื่อจริง",
+      "surname": "นามสกุล",
+      "birthday": "วันเกิด",
+      "nationality": "สัญชาติ",
+      "idNo": "เลขบัตรประชาชน",
+      "gender": "เพศ",
+      "phoneNo": "หมายเลขโทรศัพท์มือถือ",
+      "passportNo": "หนังสือเดินทาง",
+      "expectedSalary": "เงินเดือนที่คาดหวัง",
+      "placeholder": {
+        "title": "คำนำหน้า",
+        "birthday": "เดือน/วัน/ปี",
+        "nationality": "--กรุณาเลือก--"
+      }
+    },
+    "table": {
+      "selectAll": "กรุณาเลือก",
+      "delete": "ลบข้อมูล",
+      "header": {
+        "name": "ชื่อ",
+        "gender": "เพศ",
+        "phoneNo": "หมายเลขโทรศัพท์มือถือ",
+        "nationality": "สัญชาติ",
+        "option": "จัดการ"
+      }
+    }
+  }
+}

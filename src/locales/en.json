@@ -1,0 +1,56 @@
+{
+  "language": { "en": "EN", "th": "TH" },
+  "homepage": "Home",
+  "home": {
+    "menu1": {
+      "title": "Test 1",
+      "description": "Layout & Style"
+    },
+    "menu2": {
+      "title": "Test 2",
+      "description": "Connect API"
+    },
+    "menu3": {
+      "title": "Test 3",
+      "description": "Form & Table"
+    }
+  },
+  "test1": {
+    "title": "Layout & Style",
+    "moveShape": "Move shape",
+    "movePosition": "Move position"
+  },
+  "test3": {
+    "title": "Form & Table",
+    "language": [{ "en": "English" }, { "th": "Thai" }],
+    "home": "Home",
+    "form": {
+      "title": "Title",
+      "name": "Name",
+      "surname": "Surname",
+      "birthday": "Date of Birth",
+      "nationality": "Nationality",
+      "idNo": "Identification No.",
+      "gender": "Gender",
+      "phoneNo": "Phone Number",
+      "passportNo": "Passport No.",
+      "expectedSalary": "Expected Salary",
+      "placeholder": {
+        "title": "Title",
+        "birthday": "MM/dd/yyyy",
+        "nationality": "--Please Select--"
+      }
+    },
+    "table": {
+      "selectAll": "Select All",
+      "delete": "Delete",
+      "header": {
+        "name": "Name",
+        "gender": "Gender",
+        "phoneNo": "Phone Number",
+        "nationality": "Nationality",
+        "option": "option"
+      }
+    }
+  }
+}

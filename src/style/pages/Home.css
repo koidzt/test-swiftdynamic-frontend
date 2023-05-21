@@ -1,0 +1,30 @@
+.layout {
+  min-width: 100vw;
+  min-height: 100vh;
+  background: linear-gradient(to right, #6eda78, #ffa200);
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.select-button {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+}
+
+.home-content {
+  min-height: 100vh;
+  min-width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-card-menu {
+  width: 300px;
+  cursor: pointer;
+}
+.disabled {
+  cursor: auto;
+}
