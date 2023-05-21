@@ -58,6 +58,20 @@ function Test1() {
     setOffsetValue(newOffsetValue);
   };
 
+  const handleClickShape = () => {
+    let copyShapes: string[] = [...shapes];
+    const newShapes: string[] = [];
+
+    while (copyShapes.length > 0) {
+      const randomIndexShape = Math.floor(Math.random() * copyShapes.length);
+      const randomShape = copyShapes[randomIndexShape];
+      copyShapes = [...copyShapes.filter((shape) => shape !== randomShape)];
+      newShapes.push(randomShape);
+    }
+
+    setShapes(newShapes);
+  };
+
   return (
     <Layout className="layout">
       <Content style={{ padding: 20 }}>
@@ -112,7 +126,7 @@ function Test1() {
                 if (idx === 0) {
                   return (
                     <Col key={sharp} offset={index % 2 === 0 ? offsetValue[0] : offsetValue[1]} span={6}>
-                      <Button className="btn-sharp" type="ghost">
+                      <Button className="btn-sharp" type="ghost" onClick={handleClickShape}>
                         <div className={sharp}></div>
                       </Button>
                     </Col>
@@ -120,7 +134,7 @@ function Test1() {
                 } else {
                   return (
                     <Col key={sharp} span={6}>
-                      <Button className="btn-sharp" type="ghost">
+                      <Button className="btn-sharp" type="ghost" onClick={handleClickShape}>
                         <div className={sharp}></div>
                       </Button>
                     </Col>
