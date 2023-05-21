@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import '../../style/pages/Home.css';
 import '../../style/pages/Test1.css';
-import { Badge, Button, Col, Divider, Layout, Row, Space, Typography } from 'antd';
+import { Button, Col, Divider, Layout, Row, Space, Typography } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import SelectLanguage from '../../components/SelectLanguage';
 import { useNavigate } from 'react-router-dom';

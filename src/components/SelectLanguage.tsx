@@ -1,5 +1,4 @@
 import { Select } from 'antd';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 export interface ISelectLanguageProps {
@@ -13,7 +12,6 @@ interface IOptionLanguageProps {
 
 function SelectLanguage({ className }: ISelectLanguageProps) {
   const { t, i18n } = useTranslation();
-  const [lng, setLng] = useState<string>('en');
 
   const optionLanguage: Array<IOptionLanguageProps> = [
     { value: 'en', label: t('language.en') },
@@ -22,7 +20,6 @@ function SelectLanguage({ className }: ISelectLanguageProps) {
 
   const handleChange = (value: string) => {
     i18n.changeLanguage(value);
-    setLng(value);
   };
 
   return (
