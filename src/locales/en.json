@@ -22,8 +22,19 @@
   },
   "test3": {
     "title": "Form & Table",
-    "language": [{ "en": "English" }, { "th": "Thai" }],
-    "home": "Home",
+    "options": {
+      "title": {
+        "mr": "Mr",
+        "mrs": "Mrs",
+        "ms": "Miss",
+        "other": "Other"
+      },
+      "gender": {
+        "male": "Male",
+        "female": "Female",
+        "none": "Not specified"
+      }
+    },
     "form": {
       "title": "Title",
       "name": "Name",
@@ -39,6 +50,10 @@
         "title": "Title",
         "birthday": "MM/dd/yyyy",
         "nationality": "--Please Select--"
+      },
+      "button": {
+        "clear": "Clear",
+        "send": "Send"
       }
     },
     "table": {
