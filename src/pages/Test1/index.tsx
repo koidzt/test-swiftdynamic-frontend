@@ -94,7 +94,7 @@ function Test1() {
           <Row gutter={[16, 16]}>
             <Col span={6}>
               <Button className="btn-sharp btn-move" type="ghost" onClick={() => handleClickMoveShape('left')}>
-                <div className="left-triangle"></div>
+                <div className="left-triangle" />
                 {/* Label Button */}
                 <div className="label-btn-move">{t('test1.moveShape')}</div>
               </Button>
@@ -102,8 +102,8 @@ function Test1() {
 
             <Col span={12}>
               <Button className="btn-sharp btn-move" type="ghost" onClick={handleClickMovePosition}>
-                <div className="up-triangle"></div>
-                <div className="down-triangle"></div>
+                <div className="up-triangle" />
+                <div className="down-triangle" />
                 {/* Label Button */}
                 <div className="label-btn-move">{t('test1.movePosition')}</div>
               </Button>
@@ -111,7 +111,7 @@ function Test1() {
 
             <Col span={6}>
               <Button className="btn-sharp btn-move" type="ghost" onClick={() => handleClickMoveShape('right')}>
-                <div className="right-triangle"></div>
+                <div className="right-triangle" />
                 {/* Label Button */}
                 <div className="label-btn-move">{t('test1.moveShape')}</div>
               </Button>
@@ -127,7 +127,7 @@ function Test1() {
                   return (
                     <Col key={sharp} offset={index % 2 === 0 ? offsetValue[0] : offsetValue[1]} span={6}>
                       <Button className="btn-sharp" type="ghost" onClick={handleClickShape}>
-                        <div className={sharp}></div>
+                        <div className={sharp} />
                       </Button>
                     </Col>
                   );
@@ -135,7 +135,7 @@ function Test1() {
                   return (
                     <Col key={sharp} span={6}>
                       <Button className="btn-sharp" type="ghost" onClick={handleClickShape}>
-                        <div className={sharp}></div>
+                        <div className={sharp} />
                       </Button>
                     </Col>
                   );

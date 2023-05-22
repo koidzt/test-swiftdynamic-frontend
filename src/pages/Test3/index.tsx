@@ -2,29 +2,18 @@ import { useTranslation } from 'react-i18next';
 import SelectLanguage from '../../components/SelectLanguage';
 import '../../style/pages/Home.css';
 import '../../style/pages/Test3.css';
-import {
-  Button,
-  Checkbox,
-  Col,
-  DatePicker,
-  DatePickerProps,
-  Form,
-  Input,
-  Layout,
-  Radio,
-  RadioChangeEvent,
-  Row,
-  Select,
-  Space,
-  Table,
-  Typography,
-} from 'antd';
+import { Col, Layout, Row, Space, Table, Typography } from 'antd';
+import { Button, Checkbox, DatePicker, Form, Input, Radio, Select } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import { useNavigate } from 'react-router-dom';
 import { ColumnsType } from 'antd/es/table';
-import { useState } from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { DefaultOptionType } from 'antd/es/select';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../store/store';
+import { clearForm, changeValues } from '../../store/slice/formSlice';
+import dayjs from 'dayjs';
 
 interface DataType {
   key: React.Key;
@@ -36,25 +25,6 @@ interface DataType {
 }
 
 const initData: DataType[] = [];
-for (let i = 0; i < 20; i++) {
-  if (i % 2 === 0) {
-    initData.push({
-      key: i,
-      name: `Edward King ${i}`,
-      gender: 'male',
-      phoneNo: `London, Park Lane no. ${i}`,
-      nationality: 'Thai',
-    });
-  } else {
-    initData.push({
-      key: i,
-      name: `Edward King ${i}`,
-      gender: 'Female',
-      phoneNo: `London, Park Lane no. ${i}`,
-      nationality: 'Thai',
-    });
-  }
-}
 
 function Test3() {
   const { t } = useTranslation();
@@ -62,6 +32,8 @@ function Test3() {
   const [form] = Form.useForm();
   const [data, setData] = useState<DataType[]>(initData);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  const formState = useSelector((state: RootState) => state.form);
+  const dispatch = useDispatch<AppDispatch>();
 
   const onClickHomepage = () => {
     navigate(`/`);
@@ -73,17 +45,17 @@ function Test3() {
     { value: t('test3.options.title.ms'), label: t('test3.options.title.ms') },
     { value: t('test3.options.title.other'), label: t('test3.options.title.other') },
   ];
+  const optionsNationality: Array<DefaultOptionType> = [
+    { value: 'thai', label: t('test3.options.nationality.thai') },
+    { value: 'other', label: t('test3.options.nationality.other') },
+  ];
   const optionsGender: Array<DefaultOptionType> = [
     { value: 'male', label: t('test3.options.gender.male') },
     { value: 'female', label: t('test3.options.gender.female') },
     { value: 'none', label: t('test3.options.gender.none') },
   ];
 
-  const optionsPhone: Array<DefaultOptionType> = [
-    { value: '+66', label: '+66' },
-    { value: '+84', label: '+84' },
-    { value: '+86', label: '+86' },
-  ];
+  const optionsPhone: Array<DefaultOptionType> = [{ value: '+66', label: '+66' }];
 
   const columns: ColumnsType<DataType> = [
     {
@@ -151,18 +123,35 @@ function Test3() {
 
   const onFinish = (values: any) => {
     console.log('Success:', values);
+
+    form.resetFields();
   };
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
   };
 
-  const onChangeBirthday: DatePickerProps['onChange'] = (date, dateString) => {
-    console.log(date, dateString);
+  const onClickClearForm = (event: MouseEvent) => {
+    dispatch(clearForm());
+    form.resetFields();
   };
-  const onChangeGender = (e: RadioChangeEvent) => {
-    console.log('radio checked', e.target.value);
+
+  const onValuesChange = (changedValues: any, values: any) => {
+    console.log(changedValues);
+    console.log(values);
+    const newValues = { ...values };
+    if (values.birthday) {
+      newValues.birthday = dayjs(newValues.birthday).format('MM/DD/YYYY');
+    }
+    dispatch(changeValues(newValues));
   };
+
+  useEffect(() => {
+    let newFormState = { ...formState };
+    newFormState.birthday = dayjs(newFormState.birthday);
+
+    form.setFieldsValue(newFormState);
+  }, []);
 
   return (
     <Layout className="layout">
@@ -186,39 +175,40 @@ function Test3() {
             form={form}
             className="form-box"
             name="form-register"
-            initialValues={{ remember: true }}
+            initialValues={form}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
+            onValuesChange={onValuesChange}
             autoComplete="off"
           >
             <Row gutter={8}>
               <Col span={6}>
                 <Form.Item
+                  style={{ display: 'inline-block', width: '100%' }}
                   label={t('test3.form.title')}
                   wrapperCol={{ span: 'auto' }}
                   name="titleName"
-                  rules={[{ required: true, message: 'title is required' }]}
-                  style={{ display: 'inline-block', width: '100%' }}
+                  rules={[{ required: true, message: `${t('test3.form.message.title')}` }]}
                 >
                   <Select placeholder={t('test3.form.placeholder.title')} options={optionsTitle} />
                 </Form.Item>
               </Col>
               <Col span={9}>
                 <Form.Item
+                  className="d-inline-block w-100"
                   label={t('test3.form.name')}
                   name="name"
-                  rules={[{ required: true, message: 'name is required' }]}
-                  style={{ display: 'inline-block', width: '100%' }}
+                  rules={[{ required: true, message: `${t('test3.form.message.name')}` }]}
                 >
-                  <Input width={'100%'} />
+                  <Input />
                 </Form.Item>
               </Col>
               <Col span={9}>
                 <Form.Item
+                  className="d-inline-block w-100"
                   label={t('test3.form.surname')}
                   name="surname"
-                  rules={[{ required: true, message: 'surname is required' }]}
-                  style={{ display: 'inline-block', width: '100%' }}
+                  rules={[{ required: true, message: `${t('test3.form.message.surname')}` }]}
                 >
                   <Input />
                 </Form.Item>
@@ -226,65 +216,58 @@ function Test3() {
             </Row>
 
             <Row gutter={8}>
-              <Col>
+              <Col span={8}>
                 <Form.Item
                   label={t('test3.form.birthday')}
                   name="birthday"
-                  rules={[{ required: true, message: 'date of birth is required' }]}
-                  style={{ display: 'inline-block', width: '100%' }}
+                  rules={[{ required: true, message: `${t('test3.form.message.birthday')}` }]}
                 >
-                  <DatePicker name="birthday" onChange={onChangeBirthday} />
+                  <DatePicker
+                    className="w-100"
+                    name="birthday"
+                    placeholder={`${t('test3.form.placeholder.birthday')}`}
+                    format={'MM/DD/YYYY'}
+                  />
                 </Form.Item>
               </Col>
-              <Col>
+
+              <Col span={10}>
                 <Form.Item
                   label={t('test3.form.nationality')}
                   name="nationality"
-                  rules={[{ required: true, message: 'nationality is required' }]}
-                  style={{ display: 'inline-block', width: '100%' }}
+                  rules={[{ required: true, message: `${t('test3.form.message.nationality')}` }]}
                 >
-                  <Input />
+                  <Select
+                    className="w-100"
+                    placeholder={t('test3.form.placeholder.nationality')}
+                    options={optionsNationality}
+                  />
                 </Form.Item>
               </Col>
             </Row>
 
             <Row>
-              <Col>
+              <Col span={24}>
                 <Form.Item label={t('test3.form.idNo')} style={{ marginBottom: 0 }}>
                   <Typography.Paragraph>
-                    <Form.Item
-                      name={['idNo', 'idNo1']}
-                      style={{ display: 'inline-block', margin: '0px 8px', minWidth: '30px', width: '8%' }}
-                    >
-                      <Input />
+                    <Form.Item name={['idNo', 'idNo1']} className="d-inline-block mb-0 mx-8 w-8">
+                      <Input maxLength={1} />
                     </Form.Item>
                     -
-                    <Form.Item
-                      name={['idNo', 'idNo2']}
-                      style={{ display: 'inline-block', margin: '0px 8px', minWidth: '55px', width: '16%' }}
-                    >
-                      <Input />
+                    <Form.Item name={['idNo', 'idNo2']} className="d-inline-block mb-0 mx-8 w-16">
+                      <Input maxLength={4} />
                     </Form.Item>
                     -
-                    <Form.Item
-                      name={['idNo', 'idNo3']}
-                      style={{ display: 'inline-block', margin: '0px 8px', minWidth: '65px', width: '20%' }}
-                    >
-                      <Input />
+                    <Form.Item name={['idNo', 'idNo3']} className="d-inline-block mb-0 mx-8 w-20">
+                      <Input maxLength={5} />
                     </Form.Item>
                     -
-                    <Form.Item
-                      name={['idNo', 'idNo4']}
-                      style={{ display: 'inline-block', margin: '0px 8px', minWidth: '40px', width: '12%' }}
-                    >
-                      <Input />
+                    <Form.Item name={['idNo', 'idNo4']} className="d-inline-block mb-0 mx-8 w-12">
+                      <Input maxLength={2} />
                     </Form.Item>
                     -
-                    <Form.Item
-                      name={['idNo', 'idNo5']}
-                      style={{ display: 'inline-block', margin: '0px 8px', minWidth: '30px', width: '8%' }}
-                    >
-                      <Input />
+                    <Form.Item name={['idNo', 'idNo5']} className="d-inline-block mb-0 mx-8 w-8">
+                      <Input maxLength={1} />
                     </Form.Item>
                   </Typography.Paragraph>
                 </Form.Item>
@@ -292,14 +275,14 @@ function Test3() {
             </Row>
 
             <Row>
-              <Col>
+              <Col span={24}>
                 <Form.Item
+                  className="d-inline-block w-100"
                   label={t('test3.form.gender')}
                   name="gender"
-                  rules={[{ required: true, message: 'gender is required' }]}
-                  style={{ display: 'inline-block', width: '100%' }}
+                  rules={[{ required: true, message: `${t('test3.form.message.gender')}` }]}
                 >
-                  <Radio.Group onChange={onChangeGender}>
+                  <Radio.Group name="gender">
                     {optionsGender.map((gender) => (
                       <Radio key={gender.value} value={gender.value}>
                         {gender.label}
@@ -313,26 +296,26 @@ function Test3() {
             <Row>
               <Col span={24}>
                 <Form.Item
+                  className="mb-0"
                   label={t('test3.form.phoneNo')}
-                  name={'phone'}
+                  name={'phoneNo'}
                   rules={[{ required: true, message: '' }]}
-                  style={{ marginBottom: 0 }}
                 >
                   <Typography.Paragraph style={{ marginBottom: 0 }}>
                     <Form.Item
-                      name={['phone', 'prefix']}
-                      rules={[{ required: true, message: 'prefix is required' }]}
-                      style={{ display: 'inline-block', width: '15%', marginLeft: '8px', marginRight: '8px' }}
+                      className="d-inline-block w-15 mx-8 mb-0"
+                      name={'phonePrefix'}
+                      rules={[{ required: true, message: `${t('test3.form.message.phone.prefix')}` }]}
                     >
                       <Select options={optionsPhone} />
                     </Form.Item>
                     -
                     <Form.Item
-                      name={['phone', 'number']}
-                      rules={[{ required: true, message: 'number is required' }]}
-                      style={{ display: 'inline-block', width: '40%', marginLeft: '8px', marginRight: '8px' }}
+                      className="d-inline-block w-40 mx-8"
+                      name={'phoneNo'}
+                      rules={[{ required: true, message: `${t('test3.form.message.phone.number')}` }]}
                     >
-                      <Input width={'100%'} />
+                      <Input />
                     </Form.Item>
                   </Typography.Paragraph>
                 </Form.Item>
@@ -341,11 +324,7 @@ function Test3() {
 
             <Row>
               <Col span={12}>
-                <Form.Item
-                  label={t('test3.form.passportNo')}
-                  name={'passportNo'}
-                  style={{ display: 'inline-block', width: '100%' }}
-                >
+                <Form.Item className="d-inline-block w-100" label={t('test3.form.passportNo')} name={'passportNo'}>
                   <Input width={'100%'} />
                 </Form.Item>
               </Col>
@@ -354,28 +333,24 @@ function Test3() {
             <Row>
               <Col span={12}>
                 <Form.Item
+                  className="d-inline-block w-100"
                   label={t('test3.form.expectedSalary')}
-                  name={'passportNo'}
-                  rules={[{ required: true, message: 'expected salary is required' }]}
-                  style={{ display: 'inline-block', width: '100%' }}
+                  name={'expectedSalary'}
+                  rules={[{ required: true, message: `${t('test3.form.message.expectedSalary')}` }]}
                 >
                   <Input width={'100%'} />
                 </Form.Item>
               </Col>
-              <Col span={12} style={{ display: 'flex', justifyContent: 'center' }}>
-                <Space size={48}>
+
+              <Col span={12}>
+                <Space size={48} className="d-flex justify-content-center">
                   <Form.Item>
-                    <Button
-                      onClick={() => {
-                        form.resetFields();
-                      }}
-                      style={{ minWidth: '100px' }}
-                    >
+                    <Button className="min-w-100px" onClick={onClickClearForm}>
                       {t('test3.form.button.clear')}
                     </Button>
                   </Form.Item>
                   <Form.Item>
-                    <Button htmlType="submit" style={{ minWidth: '100px' }}>
+                    <Button className="min-w-100px" htmlType="submit">
                       {t('test3.form.button.send')}
                     </Button>
                   </Form.Item>

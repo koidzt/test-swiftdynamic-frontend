@@ -29,6 +29,10 @@
         "ms": "Miss",
         "other": "Other"
       },
+      "nationality": {
+        "thai": "Thai",
+        "other": "Other"
+      },
       "gender": {
         "male": "Male",
         "female": "Female",
@@ -50,6 +54,19 @@
         "title": "Title",
         "birthday": "MM/dd/yyyy",
         "nationality": "--Please Select--"
+      },
+      "message": {
+        "title": "title is require",
+        "name": "name is require",
+        "surname": "surname is require",
+        "birthday": "birthday is require",
+        "nationality": "nationality is require",
+        "gender": "gender is require",
+        "phone": {
+          "prefix": "prefix is require",
+          "number": "phone number is require"
+        },
+        "expectedSalary": "expected salary is require"
       },
       "button": {
         "clear": "Clear",
