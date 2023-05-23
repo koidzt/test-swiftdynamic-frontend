@@ -27,11 +27,11 @@ function Test1() {
 
   const rowShape = manageLists(shapes);
 
-  const handleClickHome = () => {
+  const onClickHomepage = () => {
     navigate(`/`);
   };
 
-  const handleClickMoveShape = (moveShape: 'left' | 'right') => {
+  const onClickMoveShape = (moveShape: 'left' | 'right') => {
     const newShapes = [...shapes];
     if (moveShape === 'left') {
       const firstShape = newShapes.shift();
@@ -43,7 +43,7 @@ function Test1() {
     setShapes(newShapes);
   };
 
-  const handleClickMovePosition = () => {
+  const onClickMovePosition = () => {
     const newShapes: string[] = [...shapes];
     const newOffsetValue: number[] = [...offsetValue];
     for (let index = 0; index < 3; index++) {
@@ -58,7 +58,7 @@ function Test1() {
     setOffsetValue(newOffsetValue);
   };
 
-  const handleClickShape = () => {
+  const onClickRandomShape = () => {
     let copyShapes: string[] = [...shapes];
     const newShapes: string[] = [];
 
@@ -84,7 +84,7 @@ function Test1() {
           <Col span={6}>
             <Space style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
               <SelectLanguage />
-              <Button onClick={handleClickHome}>{t('homepage')}</Button>
+              <Button onClick={onClickHomepage}>{t('homepage')}</Button>
             </Space>
           </Col>
         </Row>
@@ -93,7 +93,7 @@ function Test1() {
           {/* Header Button */}
           <Row gutter={[16, 16]}>
             <Col span={6}>
-              <Button className="btn-sharp btn-move" type="ghost" onClick={() => handleClickMoveShape('left')}>
+              <Button className="btn-sharp btn-move" type="ghost" onClick={() => onClickMoveShape('left')}>
                 <div className="left-triangle" />
                 {/* Label Button */}
                 <div className="label-btn-move">{t('test1.moveShape')}</div>
@@ -101,7 +101,7 @@ function Test1() {
             </Col>
 
             <Col span={12}>
-              <Button className="btn-sharp btn-move" type="ghost" onClick={handleClickMovePosition}>
+              <Button className="btn-sharp btn-move" type="ghost" onClick={onClickMovePosition}>
                 <div className="up-triangle" />
                 <div className="down-triangle" />
                 {/* Label Button */}
@@ -110,7 +110,7 @@ function Test1() {
             </Col>
 
             <Col span={6}>
-              <Button className="btn-sharp btn-move" type="ghost" onClick={() => handleClickMoveShape('right')}>
+              <Button className="btn-sharp btn-move" type="ghost" onClick={() => onClickMoveShape('right')}>
                 <div className="right-triangle" />
                 {/* Label Button */}
                 <div className="label-btn-move">{t('test1.moveShape')}</div>
@@ -126,7 +126,7 @@ function Test1() {
                 if (idx === 0) {
                   return (
                     <Col key={sharp} offset={index % 2 === 0 ? offsetValue[0] : offsetValue[1]} span={6}>
-                      <Button className="btn-sharp" type="ghost" onClick={handleClickShape}>
+                      <Button className="btn-sharp" type="ghost" onClick={onClickRandomShape}>
                         <div className={sharp} />
                       </Button>
                     </Col>
@@ -134,7 +134,7 @@ function Test1() {
                 } else {
                   return (
                     <Col key={sharp} span={6}>
-                      <Button className="btn-sharp" type="ghost" onClick={handleClickShape}>
+                      <Button className="btn-sharp" type="ghost" onClick={onClickRandomShape}>
                         <div className={sharp} />
                       </Button>
                     </Col>

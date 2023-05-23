@@ -1,7 +1,6 @@
 .content-page {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   align-items: center;
 }
 
@@ -43,9 +42,6 @@
   min-width: 100px;
 }
 
-.w-5 {
-  width: 5%;
-}
 .w-8 {
   width: 8%;
 }
@@ -67,17 +63,8 @@
 .w-25 {
   width: 25%;
 }
-.w-30 {
-  width: 30%;
-}
 .w-40 {
   width: 40%;
-}
-.w-50 {
-  width: 50%;
-}
-.w-75 {
-  width: 75%;
 }
 .w-100 {
   width: 100%;

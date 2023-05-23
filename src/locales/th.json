@@ -76,6 +76,7 @@
     "table": {
       "selectAll": "เลือกทั้งหมด",
       "delete": "ลบข้อมูล",
+      "edit": "แก้ไข",
       "header": {
         "name": "ชื่อ",
         "gender": "เพศ",

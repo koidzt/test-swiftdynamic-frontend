@@ -76,6 +76,7 @@
     "table": {
       "selectAll": "Select All",
       "delete": "Delete",
+      "edit": "Edit",
       "header": {
         "name": "Name",
         "gender": "Gender",

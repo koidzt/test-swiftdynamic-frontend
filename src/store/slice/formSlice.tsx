@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Dayjs } from 'dayjs';
 
-interface FormStateProps {
-  titleName: string | null;
+export interface FormStateProps {
+  titleName: string;
   name: string;
   surname: string;
-  birthday: Dayjs | string | null;
-  nationality: string | null;
-  idNo: {
+  birthday: Dayjs | string;
+  nationality: string;
+  idNo?: {
     idNo1: string;
     idNo2: string;
     idNo3: string;
@@ -22,11 +22,11 @@ interface FormStateProps {
 }
 
 export const initialFormState: FormStateProps = {
-  titleName: null,
+  titleName: '',
   name: '',
   surname: '',
-  birthday: null,
-  nationality: null,
+  birthday: '',
+  nationality: '',
   idNo: {
     idNo1: '',
     idNo2: '',
@@ -45,13 +45,10 @@ const formSlice = createSlice({
   name: 'form',
   initialState: initialFormState,
   reducers: {
-    changeValues(state, actions: PayloadAction<any>) {
-      console.log(actions);
-      state = { ...state, ...actions.payload };
-
+    changeValues(state, action: PayloadAction<any>) {
+      state = { ...state, ...action.payload };
       return state;
     },
-
     clearForm(state) {
       state = { ...state, ...initialFormState };
       return state;

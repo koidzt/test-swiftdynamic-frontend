@@ -10,29 +10,21 @@ import { ColumnsType } from 'antd/es/table';
 import { MouseEvent, useEffect, useState } from 'react';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { DefaultOptionType } from 'antd/es/select';
+import { TableFormStateProps, editTable } from '../../store/slice/tableFormSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../store/store';
+import { AppDispatch, StoreState } from '../../store/store';
 import { clearForm, changeValues } from '../../store/slice/formSlice';
 import dayjs from 'dayjs';
-
-interface DataType {
-  key: React.Key;
-  name: string;
-  gender: string;
-  phoneNo: string;
-  nationality: string;
-  option?: string;
-}
-
-const initData: DataType[] = [];
+import { nanoid } from '@reduxjs/toolkit';
 
 function Test3() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [form] = Form.useForm();
-  const [data, setData] = useState<DataType[]>(initData);
+  const [dataTable, setDataTable] = useState<TableFormStateProps[]>([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-  const formState = useSelector((state: RootState) => state.form);
+  const formState = useSelector((state: StoreState) => state.form);
+  const tableFormState = useSelector((state: StoreState) => state.tableForm);
   const dispatch = useDispatch<AppDispatch>();
 
   const onClickHomepage = () => {
@@ -54,63 +46,86 @@ function Test3() {
     { value: 'female', label: t('test3.options.gender.female') },
     { value: 'none', label: t('test3.options.gender.none') },
   ];
-
   const optionsPhone: Array<DefaultOptionType> = [{ value: '+66', label: '+66' }];
 
-  const columns: ColumnsType<DataType> = [
+  const columns: ColumnsType<TableFormStateProps> = [
     {
       title: t('test3.table.header.name'),
       dataIndex: 'name',
       sorter: (a, b) => a.name.length - b.name.length,
+      render: (value, record, index) => `${record.titleName} ${record.name} ${record.surname}`,
     },
     {
       title: t('test3.table.header.gender'),
       dataIndex: 'gender',
       sorter: (a, b) => a.gender.length - b.gender.length,
+      render: (value, record, index) => t(`test3.options.gender.${value}`),
     },
     {
       title: t('test3.table.header.phoneNo'),
       dataIndex: 'phoneNo',
       sorter: (a, b) => a.phoneNo.length - b.phoneNo.length,
+      render: (value, record, index) => `${record.phonePrefix} ${record.phoneNo}`,
     },
     {
       title: t('test3.table.header.nationality'),
       dataIndex: 'nationality',
       sorter: (a, b) => a.nationality.length - b.nationality.length,
+      render: (value, record, index) => t(`test3.options.nationality.${value}`),
     },
     {
       title: t('test3.table.header.option'),
-      dataIndex: 'option',
+      dataIndex: 'key',
+      render: (value, record, index) => (
+        <Space>
+          <Button onClick={onClickEditDataRow(value)}> {t('test3.table.edit')}</Button>
+          <Button danger onClick={onClickDeleteRow(value)}>
+            {t('test3.table.delete')}
+          </Button>
+        </Space>
+      ),
     },
   ];
 
-  const onClickDelete = () => {
-    let newData = [...data];
+  const onClickEditDataRow = (key: string) => () => {
+    const targetRow = dataTable.find((item) => item.key === key);
+    const newForm = { ...targetRow, birthday: dayjs(targetRow?.birthday) };
+
+    form.setFieldsValue(newForm);
+  };
+
+  const onClickDeleteRow = (key: string) => () => {
+    let newData = dataTable.filter((item) => item.key !== key);
+
+    setDataTable(newData);
+    dispatch(editTable(newData));
+  };
+
+  const onClickDeleteSelected = () => {
+    let newData = [...dataTable];
     selectedRowKeys.forEach((item) => {
       newData = newData.filter((data) => data.key !== item);
     });
 
-    setData(newData);
+    dispatch(editTable(newData));
+    setDataTable(newData);
+    setSelectedRowKeys([]);
   };
 
   const onClickSelectAll = (event: CheckboxChangeEvent) => {
-    console.log(event);
-
-    let newSelectedRowKeys: number[] = [];
+    let newSelectedRowKeys: React.Key[] = [];
 
     if (event.target.checked) {
-      newSelectedRowKeys = data.map((item) => Number(item.key));
+      newSelectedRowKeys = dataTable.map((item) => item.key);
     } else {
       newSelectedRowKeys = [];
     }
-
-    console.log(newSelectedRowKeys);
 
     setSelectedRowKeys(newSelectedRowKeys);
   };
 
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
-    console.log('selectedRowKeys changed: ', newSelectedRowKeys);
+    // console.log('selectedRowKeys changed: ', newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
   };
 
@@ -121,24 +136,29 @@ function Test3() {
 
   const hasSelected = selectedRowKeys.length > 0;
 
-  const onFinish = (values: any) => {
-    console.log('Success:', values);
-
-    form.resetFields();
-  };
-
-  const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo);
-  };
-
-  const onClickClearForm = (event: MouseEvent) => {
+  const onClickClearForm = () => {
     dispatch(clearForm());
     form.resetFields();
   };
 
+  const onFinish = (values: any) => {
+    // console.log('Success:', values);
+    const newForm = { ...values, birthday: dayjs(values.birthday).format('MM/DD/YYYY') };
+    const newDataTable = [...dataTable];
+    const findIndex = newDataTable.findIndex((item) => item.key === form.getFieldValue('key'));
+
+    if (findIndex !== -1) {
+      newDataTable[findIndex] = { ...newDataTable[findIndex], ...newForm };
+    } else {
+      const newData = { ...newForm, key: nanoid(5) };
+      newDataTable.push(newData);
+    }
+
+    dispatch(editTable(newDataTable));
+    onClickClearForm();
+  };
+
   const onValuesChange = (changedValues: any, values: any) => {
-    console.log(changedValues);
-    console.log(values);
     const newValues = { ...values };
     if (values.birthday) {
       newValues.birthday = dayjs(newValues.birthday).format('MM/DD/YYYY');
@@ -148,10 +168,15 @@ function Test3() {
 
   useEffect(() => {
     let newFormState = { ...formState };
-    newFormState.birthday = dayjs(newFormState.birthday);
+    newFormState.birthday = formState.birthday ? dayjs(formState.birthday) : formState.birthday;
 
     form.setFieldsValue(newFormState);
+    // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    setDataTable(tableFormState);
+  }, [tableFormState]);
 
   return (
     <Layout className="layout">
@@ -177,7 +202,6 @@ function Test3() {
             name="form-register"
             initialValues={form}
             onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
             onValuesChange={onValuesChange}
             autoComplete="off"
           >
@@ -361,13 +385,19 @@ function Test3() {
 
           <div className="table-box">
             <Space style={{ display: 'flex', marginBottom: '8px' }}>
-              <Checkbox onChange={onClickSelectAll}>{t('test3.table.selectAll')}</Checkbox>
-              <Button danger onClick={onClickDelete} disabled={!hasSelected}>
+              <Checkbox
+                onChange={onClickSelectAll}
+                checked={dataTable.length !== 0 && selectedRowKeys.length === dataTable.length}
+                disabled={dataTable.length === 0}
+              >
+                {t('test3.table.selectAll')}
+              </Checkbox>
+              <Button danger onClick={onClickDeleteSelected} disabled={!hasSelected}>
                 {t('test3.table.delete')}
               </Button>
             </Space>
 
-            <Table rowSelection={rowSelection} columns={columns} dataSource={data} size="small" scroll={{ y: 235 }} />
+            <Table rowSelection={rowSelection} columns={columns} dataSource={dataTable} size="small" />
           </div>
         </Content>
       </Content>
