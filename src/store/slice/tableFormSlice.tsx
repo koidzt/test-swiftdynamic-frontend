@@ -5,7 +5,11 @@ export interface TableFormStateProps extends FormStateProps {
   key: string;
 }
 
-const initialState: TableFormStateProps[] = [];
+const cacheState = localStorage.getItem('tableFormSwiftDynamic')
+  ? JSON.parse(localStorage.getItem('tableFormSwiftDynamic')!)
+  : [];
+
+const initialState: TableFormStateProps[] = cacheState;
 
 const tableFormSlice = createSlice({
   name: 'tableForm',
@@ -13,6 +17,8 @@ const tableFormSlice = createSlice({
   reducers: {
     editTable: (state, action: PayloadAction<TableFormStateProps[]>) => {
       state = action.payload;
+
+      localStorage.setItem('tableFormSwiftDynamic', JSON.stringify(state));
 
       return state;
     },

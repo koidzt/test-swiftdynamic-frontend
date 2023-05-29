@@ -2,23 +2,23 @@ import { configureStore } from '@reduxjs/toolkit';
 import formSlice from './slice/formSlice';
 import tableFormSlice from './slice/tableFormSlice';
 
-const localStorageMiddleware = (store: any) => (next: any) => (action: any) => {
-  const result = next(action);
-  localStorage.setItem('swiftDynamicState', JSON.stringify(store.getState()));
-  return result;
-};
+// const localStorageMiddleware = (store: any) => (next: any) => (action: any) => {
+//   const result = next(action);
+//   localStorage.setItem('swiftDynamicState', JSON.stringify(store.getState()));
+//   return result;
+// };
 
-const cacheState = localStorage.getItem('swiftDynamicState')
-  ? JSON.parse(localStorage.getItem('swiftDynamicState')!)
-  : {};
+// const cacheState = localStorage.getItem('swiftDynamicState')
+//   ? JSON.parse(localStorage.getItem('swiftDynamicState')!)
+//   : {};
 
 export const store = configureStore({
   reducer: {
     form: formSlice,
     tableForm: tableFormSlice,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(localStorageMiddleware),
-  preloadedState: cacheState,
+  // middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(localStorageMiddleware),
+  // preloadedState: cacheState,
 });
 
 export default store;
